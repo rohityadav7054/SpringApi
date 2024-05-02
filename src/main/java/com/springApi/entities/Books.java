@@ -1,7 +1,18 @@
 package com.springApi.entities;
 
-public class Books {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name="Books")
+public class Books {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="book_id")
 	private Integer id;
 	private String title;
 	private String author;

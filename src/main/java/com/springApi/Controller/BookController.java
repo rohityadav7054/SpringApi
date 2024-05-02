@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,18 +24,18 @@ public class BookController {
 	private BookServices bookService;
 	
 	@GetMapping("/books")
-	public ResponseEntity<List<Books>>  getBooks() {
+	public ResponseEntity<List<Books>> getBooks() {
 		List<Books> list=bookService.getAllBooks();
 		if(list.size()<=0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-		return ResponseEntity.of(Optional.of(list));
+		return ResponseEntity.status(HttpStatus.CREATED).body(list);
 	}
 	
 	
 	@GetMapping("/books/{id}")
-	public  ResponseEntity<Books> getBook(@PathVariable("id") Integer id){
-		Books book=bookService.getBookById(id);
+	public  ResponseEntity<Optional<Books>> getBook(@PathVariable("id") Integer id){
+		Optional<Books> book=bookService.getBookById(id);
 		if(book==null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
@@ -46,10 +45,10 @@ public class BookController {
 	
 	@PostMapping("/books")
 	public ResponseEntity<Books> addBooks(@RequestBody Books book) {
-      Books b = null;
+		 Books b = null;
       try {
-		b=this.bookService.addBook(book);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		b =this.bookService.addBook(book);
+		return ResponseEntity.status(HttpStatus.CREATED).body(b);
 	} catch (Exception e) {
 		e.printStackTrace();
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -79,7 +78,7 @@ public class BookController {
 	public  ResponseEntity<Books> updatebooks(@RequestBody Books book,@PathVariable("bookid") Integer bookid) {
 	
 		try {
-			this.bookService.deleteBook(book,bookid);
+			this.bookService.updateBook(book,bookid);
 			return ResponseEntity.ok().body(book);
 			
 		} catch (Exception e) {
