@@ -11,16 +11,17 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class fileUploadHelper {
 
-	public final String UPLOAD_DIR="D:\\images";
-	
+	public final String UPLOAD_DIR = "D:\\images";
+
 	public boolean uploadfile(MultipartFile multipartfile) {
-	 
-		boolean f= false;
-		
+
+		boolean f = false;
+
 		try {
-			
-			Files.copy(multipartfile.getInputStream(),Paths.get(UPLOAD_DIR+File.separator+multipartfile.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING);
-			f=true;
+			Files.copy(multipartfile.getInputStream(),
+					Paths.get(UPLOAD_DIR + File.separator + multipartfile.getOriginalFilename()),
+					StandardCopyOption.REPLACE_EXISTING);
+			f = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
